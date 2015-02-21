@@ -18,6 +18,7 @@
 ;    CONFIGURATIONS 
 
 #NoTrayIcon
+#SingleInstance force
 ;disable hotkeys until setup is complete
 Suspend, On 
 #NoEnv
@@ -157,7 +158,7 @@ DisableKeyboardHotKeys()
 GetIncludedActiveWindow()  
 
 ; Set a timer to check for a changed window
-SetTimer, Winchanged, 100
+;~ SetTimer, Winchanged, 100
 
 ;Change the Running performance speed (Priority changed to High in GetIncludedActiveWindow)
 SetBatchLines, -1

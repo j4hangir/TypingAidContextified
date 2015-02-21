@@ -1,8 +1,13 @@
 ;These functions and labels are related to the active window
+DllCall( "RegisterShellHookWindow", UInt, WinExist())
+MsgNum := DllCall( "RegisterWindowMessage", Str, "SHELLHOOK" )
+OnMessage(MsgNum, "ShellMessage")
 
-
-; Timed function to detect change of focus (and remove ListBox when changing active window) 
-Winchanged: 
+ShellMessage(wParam,lParam)
+{
+   MsgBox % lParam
+   if (wParam!=0x8004 && wParam!=6)  ;HSHELL_WINDOWACTIVATED
+      return
    ;make sure we are in decimal format in case ConvertWordToAscii was interrupted
    IfEqual, A_FormatInteger, H
       SetFormat,Integer,D
@@ -24,8 +29,9 @@ Winchanged:
             GetIncludedActiveWindow()
          }
    Return
-   
+}
 ;------------------------------------------------------------------------
+
 
 GetIncludedActiveWindow()
 {
