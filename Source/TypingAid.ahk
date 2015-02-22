@@ -17,7 +17,15 @@
 
 ;    CONFIGURATIONS 
 
-#NoTrayIcon
+#include %A_ScriptDir%\Includes
+#Include Window.ahk
+#Include ListBox.ahk
+#Include Helper.ahk
+#Include Preferences File.ahk
+#Include Sending.ahk
+#Include Wordlist.ahk
+
+;~ #NoTrayIcon
 #SingleInstance force
 ;disable hotkeys until setup is complete
 Suspend, On 
@@ -976,33 +984,28 @@ MaybeFixFileEncoding(File,Encoding)
 ;------------------------------------------------------------------------
    
 SaveScript:
-;make sure we are in decimal format in case ConvertWordToAscii was interrupted
-IfEqual, A_FormatInteger, H
-   SetFormat,Integer,D
+{
+   ;make sure we are in decimal format in case ConvertWordToAscii was interrupted
+   IfEqual, A_FormatInteger, H
+      SetFormat,Integer,D
 
-; Close the ListBox if it's open
-CloseListBox()
+   ; Close the ListBox if it's open
+   CloseListBox()
 
-Suspend, On
+   Suspend, On
 
-;Change the cleanup performance speed
-SetBatchLines, 20ms
-Process, Priority,,Normal
+   ;Change the cleanup performance speed
+   SetBatchLines, 20ms
+   Process, Priority,,Normal
 
-;Grab the Helper Window Position if open
-MaybeSaveHelperWindowPos()
+   ;Grab the Helper Window Position if open
+   MaybeSaveHelperWindowPos()
 
-;Write the Helper Window Position to the Preferences File
-MaybeWriteHelperWindowPos()
+   ;Write the Helper Window Position to the Preferences File
+   MaybeWriteHelperWindowPos()
 
-; Update the Learned Words
-MaybeUpdateWordlist()
+   ; Update the Learned Words
+   MaybeUpdateWordlist()
+   ExitApp
+}
 
-ExitApp
-
-#Include %A_ScriptDir%\Includes\ListBox.ahk
-#Include %A_ScriptDir%\Includes\Helper.ahk
-#Include %A_ScriptDir%\Includes\Preferences File.ahk
-#Include %A_ScriptDir%\Includes\Sending.ahk
-#Include %A_ScriptDir%\Includes\Window.ahk
-#Include %A_ScriptDir%\Includes\Wordlist.ahk

@@ -1,18 +1,18 @@
 ;These functions and labels are related to the active window
+Gui +LastFound
 DllCall( "RegisterShellHookWindow", UInt, WinExist())
 MsgNum := DllCall( "RegisterWindowMessage", Str, "SHELLHOOK" )
 OnMessage(MsgNum, "ShellMessage")
 
 ShellMessage(wParam,lParam)
 {
-   MsgBox % lParam
    if (wParam!=0x8004 && wParam!=6)  ;HSHELL_WINDOWACTIVATED
       return
    ;make sure we are in decimal format in case ConvertWordToAscii was interrupted
    IfEqual, A_FormatInteger, H
       SetFormat,Integer,D
    
-   IF ( ReturnWinActive() )
+   IF ( ReturnWinActive(lParam) )
    {
       IfNotEqual, DetectMouseClickMove, On 
       {
@@ -172,11 +172,14 @@ CheckForActive(ActiveProcess,ActiveTitle)
 
 ;------------------------------------------------------------------------
       
-ReturnWinActive()
+ReturnWinActive(aid=0)
 {
    global Active_id
    global Active_Title
-   WinGet, Temp_id, ID, A
+   if (aid)
+      Temp_id := aid
+   else
+      WinGet, Temp_id, ID, A
    WinGetTitle, Temp_Title, ahk_id %Temp_id%
    Last_Title := Active_Title
    ; remove all asterisks, dashes, and spaces from title in case saved value changes
